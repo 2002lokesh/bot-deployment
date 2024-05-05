@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot</title>
+</head>
+<body>
+    <h1>Chatbot</h1>
+    <form id="chatForm">
+        <label for="userInput">Enter your message:</label>
+        <input type="text" id="userInput" name="userInput">
+        <button type="submit">Send</button>
+    </form>
+    <div id="chatContainer"></div>
+
+    <script>
+        document.getElementById('chatForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const userInput = document.getElementById('userInput').value;
+
+            const response = await fetch('http://127.0.0.1:8000/chatbot/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message: userInput }),
+            });
+
+            const data = await response.json();
+            displayChatbotResponse(data.Chatbot);
+        });
+
+        function displayChatbotResponse(response) {
+            const chatContainer = document.getElementById('chatContainer');
+            const chatMessage = document.createElement('div');
+            chatMessage.textContent = 'Chatbot: ' + response;
+            chatContainer.appendChild(chatMessage);
+        }
+    </script>
+</body>
+</html>
