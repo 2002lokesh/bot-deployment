@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from sklearn.feature_extraction.text import CountVectorizer
@@ -7,8 +7,6 @@ import json
 import numpy as np
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
-#nltk.download('punkt')
-#nltk.download('stopwords')
 
 # Initialize FastAPI app
 app = FastAPI()
@@ -37,7 +35,7 @@ def get_most_similar_intent(user_input, vectorizer, X, labels):
 class Item(BaseModel):
     message: str
 
-# Define FastAPI endpoint
+# Define FastAPI endpoint for POST method
 @app.post("/chatbot/")
 async def chatbot(item: Item):
     user_input = item.message
@@ -46,6 +44,16 @@ async def chatbot(item: Item):
         if intent_data['tag'] == intent:
             responses = intent_data['responses']
             return {"Chatbot": np.random.choice(responses)}
+
+# Define FastAPI endpoint for GET method
+@app.get("/chatbot/")
+async def get_chatbot():
+    return {"message": "Welcome to the chatbot!"}
+
+# Define FastAPI endpoint for PUT method
+@app.put("/chatbot/")
+async def update_chatbot(item: Item):
+    return {"message": f"Chatbot updated with message: {item.message}"}
 
 # Mount the directory containing your HTML file as a static directory
 app.mount("/", StaticFiles(directory="static", html=True))
