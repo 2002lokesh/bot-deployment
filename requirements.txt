@@ -3,3 +3,12 @@ uvicorn==0.15.0
 pydantic>=1.8.3
 scikit-learn>=0.24.2
 cython>=0.29.24
+
+
+fastapi
+uvicorn
+gunicorn
+jinja2
+python-multipart
+scikit-learn
+nltk
